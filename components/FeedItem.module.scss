@@ -1,0 +1,36 @@
+.feedItem {
+	margin: 0.5rem;
+	border-radius: 4px;
+	border: 1px solid white;
+	color: white;
+
+	.title {
+		text-align:center;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+	.header {
+		font-size: 1rem;
+
+		span {
+			padding-left: 1rem;
+		}
+	}
+
+	.content {
+		text-align: center;
+		width: 100%;
+
+		.contentFrame {
+			border: none;
+			display: block;
+			margin: auto;
+			width: 96%;
+			height: 500px;
+		}
+	}
+}
+
+
+
