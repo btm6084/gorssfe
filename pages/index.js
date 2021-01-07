@@ -2,6 +2,7 @@ import FeedItem from "../components/FeedItem";
 
 function HomePage({ feed }) {
 	console.log(feed)
+
 	return (
 		<div>
 			{feed.map((item) => (

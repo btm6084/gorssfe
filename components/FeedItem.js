@@ -21,10 +21,14 @@ class FeedItem extends Component {
 		return bottom < 0;
 	}
 
+	markSeen = (id) => {
+		fetch(`http://localhost:4080/feed/seen/${id}`, { method: 'PUT' });
+	}
+
 	handleScroll = () => {
 		if (this.aboveTheFold(this.feedItemBody)) {
 			window.removeEventListener('scroll', this.handleScroll);
-			console.log(this.props.item.id)
+			this.markSeen(this.props.item.id);
 		}
 	}
 
