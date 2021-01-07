@@ -1,6 +1,6 @@
 import FeedItem from "../components/FeedItem";
 
-function HomePage({feed}) {
+function HomePage({ feed }) {
 	console.log(feed)
 	return (
 		<div>

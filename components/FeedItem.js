@@ -15,18 +15,21 @@ class FeedItem extends Component {
 		this.setState({ showMe: !this.state.showMe });
 	}
 
-	// isInViewport(ref, offset = 0) {
-	// 	if (!this.feedItemBody) return false;
-	// 	const top = ref.getBoundingClientRect().top;
-	// 	return (top + offset) >= 0 && (top - offset) <= window.innerHeight;
-	// }
+	aboveTheFold(ref, offset = 0) {
+		if (!ref) return false;
+		const bottom = ref.current.getBoundingClientRect().bottom;
+		return bottom < 0;
+	}
 
-	handleScroll() {
-		// console.log(this.props.item.id);
+	handleScroll = () => {
+		if (this.aboveTheFold(this.feedItemBody)) {
+			window.removeEventListener('scroll', this.handleScroll);
+			console.log(this.props.item.id)
+		}
 	}
 
 	componentDidMount() {
-		window.addEventListener('scroll', () => this.handleScroll());
+		window.addEventListener('scroll', this.handleScroll);
 	}
 
 	componentWillUnmount() {
@@ -34,8 +37,8 @@ class FeedItem extends Component {
 	}
 
 	render() {
-		const showMe = this.state.showMe;
-		const item = this.props.item;
+		const { showMe } = this.state;
+		const { item } = this.props;
 
 		return (
 			<div key={item.id} className={styles.feedItem} ref={this.feedItemBody}>
