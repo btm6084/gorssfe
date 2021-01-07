@@ -8,7 +8,7 @@ function HomePage({feed}) {
 				<FeedItem item={item} key={item.id} />
 			))}
 		</div>
-		)
+	)
 }
 
 export async function getStaticProps() {
