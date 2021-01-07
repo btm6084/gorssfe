@@ -17,7 +17,7 @@ function HomePage({ feed }) {
 }
 
 export async function getStaticProps() {
-	const res = await fetch('http://localhost:4080/feed/');
+	const res = await fetch('http://localhost:4080/feed');
 	const feed = await res.json();
 
 	return {

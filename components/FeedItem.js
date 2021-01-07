@@ -48,19 +48,13 @@ class FeedItem extends Component {
 		window.removeEventListener('scroll', this.handleScroll);
 	}
 
-	isReddit = (url) => {
-		let re = /^https:\/\/(old|www).reddit.com/;
-		return re.test(url);
-	}
-
-	cachedReddit = (url) => {
-		let re = /^https:\/\/(old|www).reddit.com/;
-		return url.replace(re, 'https://www.removeddit.com');
-	}
-
 	render() {
 		const { showMe } = this.state;
-		const { item } = this.props;
+		let { item } = this.props;
+
+		if (isReddit(item.canonicalURL)) {
+			item = parseReddit(item)
+		}
 
 		return (
 			<div key={item.id} className={styles.feedItem} ref={this.feedItemBody}>
@@ -79,7 +73,8 @@ class FeedItem extends Component {
 					<div className={styles.metaData}>
 						<span>{item.source}</span>
 						<span>{item.age}</span>
-						{this.isReddit(item.canonicalURL) ? <span><a href={this.cachedReddit(item.canonicalURL)} target="_blank">Removeddit</a></span> : ``}
+						{isReddit(item.canonicalURL) ? <span><a href={cachedReddit(item.canonicalURL)} target="_blank">Removeddit</a></span> : ``}
+						{item.target ? <span><a href={item.target} target="_blank">Target</a></span> : ``}
 					</div>
 
 					<div onClick={() => this.toggle()} className={styles.showContent}>
@@ -87,12 +82,33 @@ class FeedItem extends Component {
 					</div>
 
 					<div className={styles.content} align="center">
-						{showMe ? <iframe className={styles.contentFrame} src={"http://localhost:4080/proxy/" + item.id} sandbox=""></iframe> : ``}
+						{showMe ? <iframe className={styles.contentFrame} src={"http://localhost:4080/proxy/url/" + encodeURIComponent(item.target)} sandbox=""></iframe> : ``}
 					</div>
 				</div>
 			</div>
 		)
 	}
+}
+
+function cachedReddit(url) {
+	let re = /^https:\/\/(old|www).reddit.com/;
+	return url.replace(re, 'https://www.removeddit.com');
+}
+
+function isReddit(url) {
+	let re = /^https:\/\/(old|www).reddit.com/;
+	return re.test(url);
+}
+
+function parseReddit(item) {
+	let linkRE = /<a href="([^"]+)">\[link\]/;
+
+	if (linkRE.test(item.content)) {
+		const matches = item.content.match(linkRE);
+		item.target = matches[1];
+	}
+
+	return item
 }
 
 export default FeedItem
