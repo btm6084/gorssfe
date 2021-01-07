@@ -1,7 +1,11 @@
 import FeedItem from "../components/FeedItem";
+import React from 'react';
 
 function HomePage({ feed }) {
-	console.log(feed)
+	// Effectively componentDidMount
+	React.useEffect(() => {
+		window.setTimeout(() => { window.scrollTo(0, 0); }, 250);
+	})
 
 	return (
 		<div>

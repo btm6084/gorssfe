@@ -6,6 +6,7 @@ class FeedItem extends Component {
 		super(props);
 		this.state = {
 			showMe: false,
+			bottom: 0,
 		}
 
 		this.feedItemBody = React.createRef();
@@ -15,10 +16,17 @@ class FeedItem extends Component {
 		this.setState({ showMe: !this.state.showMe });
 	}
 
-	aboveTheFold(ref, offset = 0) {
+	shouldMark(ref, offset = 0) {
 		if (!ref) return false;
-		const bottom = ref.current.getBoundingClientRect().bottom;
-		return bottom < 0;
+		const oldBottom = this.state.bottom;
+		this.state.bottom = ref.current.getBoundingClientRect().bottom;
+
+		// Don't mark if we're scrolling up.
+		if (oldBottom <= 0 || oldBottom < this.state.bottom) {
+			return false;
+		}
+
+		return this.state.bottom < 0;
 	}
 
 	markSeen = (id) => {
@@ -26,7 +34,7 @@ class FeedItem extends Component {
 	}
 
 	handleScroll = () => {
-		if (this.aboveTheFold(this.feedItemBody)) {
+		if (this.shouldMark(this.feedItemBody)) {
 			window.removeEventListener('scroll', this.handleScroll);
 			this.markSeen(this.props.item.id);
 		}
