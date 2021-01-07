@@ -35,7 +35,6 @@
 
 			.title {
 				text-align:center;
-				font-weight: bold;
 				cursor: pointer;
 				align-self: center;
 				justify-self: center;
@@ -44,6 +43,7 @@
 				.titleLink {
 					color: white;
 					text-decoration: none;
+					font-weight: normal;
 				}
 			}
 		}

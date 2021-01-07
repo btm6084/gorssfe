@@ -12,14 +12,17 @@ function FeedItem({item}) {
 		<div key={item.id} className={styles.feedItem}>
 			<div className={styles.body}>
 				<div className={styles.flexContainer}>
-					<div class={styles.titleImage}>
-						<img src={item.imageURL}></img>
-					</div>
+					{ item.imageURL ?
+						<div class={styles.titleImage}>
+							<img src={item.imageURL}></img>
+						</div> : ``
+					}
 					<h1 className={styles.title}>
 						<a href={item.canonicalURL} className={styles.titleLink} target="_blank">
 							{item.title}
 						</a>
 					</h1>
+
 				</div>
 				<div className={styles.metaData}>
 					<span>{item.source}</span>
