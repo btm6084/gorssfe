@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from './FeedItem.module.scss'
-import Link from 'next/link'
 
 function FeedItem({item}) {
 	const [showMe, setShowMe] = useState(false);
@@ -11,11 +10,11 @@ function FeedItem({item}) {
 
 	return (
 		<div key={item.id} className={styles.feedItem}>
-			<Link href={item.canonicalURL}>
-				<h1 className={styles.title}>
+			<h1 className={styles.title}>
+				<a href={item.canonicalURL} className={styles.titleLink} target="_blank">
 					{item.title}
-				</h1>
-			</Link>
+				</a>
+			</h1>
 			<div className={styles.header}>
 				<span>{item.source}</span>
 				<span>{item.age}</span>
