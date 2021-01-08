@@ -144,7 +144,7 @@ function getContent(item, serverHost) {
 				sandbox = true
 			}
 
-			return <iframe className={styles.contentFrame} src={`${serverHost}/proxy/url/${encodeURIComponent(item.target)}`} sandbox={sandbox ? `` : `allow-forms allow-scripts`} />
+			return <iframe className={styles.contentFrame} src={`${serverHost}/proxy/url/?url=${encodeURIComponent(item.target)}`} sandbox={sandbox ? `` : `allow-forms allow-scripts`} />
 	}
 }
 
