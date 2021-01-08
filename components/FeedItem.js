@@ -101,7 +101,7 @@ class FeedItem extends Component {
 
 const imageRE = /\.jpg|\.png/
 const youtubeRE = /youtu.be\/(.+)/
-const youtubeRE2 = /youtube.com\/watch\?v=(.+)/
+const youtubeRE2 = /youtube.com\/watch\?v=([^&]+)/
 
 function cachedReddit(url) {
 	let re = /^https:\/\/(old|www).reddit.com/;
@@ -137,12 +137,15 @@ function parseReddit(item) {
 }
 
 function getContent(item, serverHost) {
+	let match;
 	switch (true) {
 		case imageRE.test(item.target):
 			return <img src={item.target} />
 		case youtubeRE.test(item.target):
+			match = item.target.match(youtubeRE)
+			return <iframe src={`https://www.youtube.com/embed/${match[1]}?feature=oembed`} className={styles.contentFrame} frameborder='0' allowfullscreen=""></iframe>
 		case youtubeRE2.test(item.target):
-			const match = item.target.match(youtubeRE)
+			match = item.target.match(youtubeRE2)
 			return <iframe src={`https://www.youtube.com/embed/${match[1]}?feature=oembed`} className={styles.contentFrame} frameborder='0' allowfullscreen=""></iframe>
 		default:
 			let sandbox = false
