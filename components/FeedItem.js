@@ -38,6 +38,7 @@ class FeedItem extends Component {
 		if (this.shouldMark(this.feedItemBody)) {
 			window.removeEventListener('scroll', this.handleScroll);
 			this.markSeen(this.props.item.id);
+			this.setState({ showMe: false });
 		}
 	}
 
@@ -59,11 +60,6 @@ class FeedItem extends Component {
 
 		if (isReddit(item.canonicalURL)) {
 			item = parseReddit(item)
-		}
-
-		let sandbox = false
-		if (isReddit(item.target)) {
-			sandbox = true
 		}
 
 		return (
@@ -95,7 +91,7 @@ class FeedItem extends Component {
 					</div>
 
 					<div className={styles.content} align="center">
-						{showMe ? <iframe className={styles.contentFrame} ref={this.contentFrame} onLoad={() => this.onIframeChange()} src={"http://localhost:4080/proxy/url/" + encodeURIComponent(item.target)} sandbox={sandbox ? `` : `allow-scripts`}></iframe> : ``}
+						{showMe ? getContent(item) : ``}
 					</div>
 				</div>
 			</div>
@@ -103,13 +99,15 @@ class FeedItem extends Component {
 	}
 }
 
+const imageRE = /\.jpg|\.png/
+
 function cachedReddit(url) {
 	let re = /^https:\/\/(old|www).reddit.com/;
 	return url.replace(re, 'https://www.removeddit.com');
 }
 
 function isReddit(url) {
-	return /(old|www|i|v).reddit.com/.test(new URL(url).hostname)
+	return /(old|www|i|v).reddit.com|v.redd.it/.test(new URL(url).hostname)
 }
 
 function parseReddit(item) {
@@ -117,11 +115,13 @@ function parseReddit(item) {
 
 	if (linkRE.test(item.content)) {
 		const matches = item.content.match(linkRE);
-		item.target = matches[1];
+		if (!/v.redd.it/.test(matches[1])) {
+			item.target = matches[1];
+		}
 	}
 
 	switch (true) {
-		case /\.jpg|\.png/.test(item.target):
+		case imageRE.test(item.target):
 			item.type = "Picture"
 			item.imageURL = item.target;
 			break;
@@ -131,7 +131,17 @@ function parseReddit(item) {
 }
 
 function getContent(item) {
+	switch(true) {
+		case imageRE.test(item.target):
+			return <img src={item.target} />
+		default:
+			let sandbox = false
+			if (isReddit(item.target)) {
+				sandbox = true
+			}
 
+			return <iframe className={styles.contentFrame} src={"http://localhost:4080/proxy/url/" + encodeURIComponent(item.target)} sandbox={sandbox ? `` : `allow-forms allow-scripts`} />
+	}
 }
 
 export default FeedItem
