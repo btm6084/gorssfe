@@ -101,7 +101,7 @@ class FeedItem extends Component {
 
 const imageRE = /\.jpg|\.png/
 const youtubeRE = /youtu.be\/(.+)/
-const youtubeRE2 = /youtube.com\/(.+)/
+const youtubeRE2 = /youtube.com\/watch\?v=(.+)/
 
 function cachedReddit(url) {
 	let re = /^https:\/\/(old|www).reddit.com/;
