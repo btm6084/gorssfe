@@ -1,28 +1,32 @@
 import FeedItem from "../components/FeedItem";
 import React from 'react';
+import styles from './index.module.scss'
 
-function HomePage({ feed }) {
+
+function HomePage({ feed, serverHost }) {
 	// Effectively componentDidMount
 	React.useEffect(() => {
 		window.setTimeout(() => { window.scrollTo(0, 0); }, 250);
 	})
 
 	return (
-		<div>
+		<div className={styles.mainBody}>
 			{feed.map((item) => (
-				<FeedItem item={item} key={item.id} />
+				<FeedItem item={item} serverHost={serverHost} key={item.id} />
 			))}
 		</div>
 	)
 }
 
 export async function getStaticProps() {
-	const res = await fetch('http://localhost:4080/feed');
+	const serverHost = "http://localhost:4080";
+	const res = await fetch(`${serverHost}/feed`);
 	const feed = await res.json();
 
 	return {
 		props: {
 			feed: feed.result,
+			serverHost: serverHost,
 		},
 	};
 }

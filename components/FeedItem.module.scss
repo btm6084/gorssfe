@@ -36,7 +36,6 @@
 				}
 
 				img {
-					background-color: white;
 					object-fit: contain;
 					object-position: top center;
 					width: 100%;
@@ -53,6 +52,7 @@
 
 				@media only screen and (min-width: 768px) {
 					padding-left: 2rem;
+					text-align: left;
 				}
 
 				.titleLink {
@@ -64,15 +64,21 @@
 		}
 
 		.metaData {
+			color: #ccc;
 			padding: 0.5rem 0;
 			font-size: 1rem;
+
+			&.titleMeta {
+				font-weight: normal;
+				padding: 0;
+			}
 
 			span:not(:first-child) {
 				padding-left: 1rem;
 			}
 
 			a {
-				color: white;
+				color: #ccc;
 				text-decoration: none;
 				font-weight: normal;
 			}

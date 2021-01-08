@@ -30,7 +30,7 @@ class FeedItem extends Component {
 	}
 
 	markSeen = (id) => {
-		fetch(`http://localhost:4080/feed/seen/${id}`, { method: 'PUT' });
+		fetch(`${this.props.serverHost}/feed/seen/${id}`, { method: 'PUT' });
 	}
 
 	handleScroll = () => {
@@ -56,6 +56,12 @@ class FeedItem extends Component {
 			item = parseReddit(item)
 		}
 
+		let sandbox = false
+		if (isReddit(item.target)) {
+			sandbox = true
+		}
+
+
 		return (
 			<div key={item.id} className={styles.feedItem} ref={this.feedItemBody}>
 				<div className={styles.body}>
@@ -67,11 +73,14 @@ class FeedItem extends Component {
 							<a href={item.canonicalURL} className={styles.titleLink} target="_blank">
 								{item.title}
 							</a>
+							<div className={`${styles.metaData} ${styles.titleMeta}`}>
+								<span>{item.source}</span>
+								<span>{new URL(item.target).hostname.replace('www.', '')}</span>
+							</div>
 						</h1>
 
 					</div>
 					<div className={styles.metaData}>
-						<span>{item.source}</span>
 						<span>{item.age}</span>
 						{isReddit(item.canonicalURL) ? <span><a href={cachedReddit(item.canonicalURL)} target="_blank">Removeddit</a></span> : ``}
 						{item.target ? <span><a href={item.target} target="_blank">Target</a></span> : ``}
@@ -82,7 +91,7 @@ class FeedItem extends Component {
 					</div>
 
 					<div className={styles.content} align="center">
-						{showMe ? <iframe className={styles.contentFrame} src={"http://localhost:4080/proxy/url/" + encodeURIComponent(item.target)} sandbox=""></iframe> : ``}
+						{showMe ? <iframe className={styles.contentFrame} src={"http://localhost:4080/proxy/url/" + encodeURIComponent(item.target)} sandbox={sandbox ? ``:`allow-scripts`}></iframe> : ``}
 					</div>
 				</div>
 			</div>
@@ -96,8 +105,7 @@ function cachedReddit(url) {
 }
 
 function isReddit(url) {
-	let re = /^https:\/\/(old|www).reddit.com/;
-	return re.test(url);
+	return /(old|www|i|v).reddit.com/.test(new URL(url).hostname)
 }
 
 function parseReddit(item) {
@@ -106,6 +114,13 @@ function parseReddit(item) {
 	if (linkRE.test(item.content)) {
 		const matches = item.content.match(linkRE);
 		item.target = matches[1];
+	}
+
+	switch (true) {
+		case /\.jpg|\.png/.test(item.target):
+			item.type = "Picture"
+			item.imageURL = item.target;
+			break;
 	}
 
 	return item
