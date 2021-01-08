@@ -9,7 +9,7 @@ function HomePage({ feed }) {
 		window.setTimeout(() => { window.scrollTo(0, 0); }, 250);
 	})
 
-	const serverHost = 'https://gorss.benjaminmaynor.com/api';
+	const serverHost = 'https://dailies.benjaminmaynor.com/api';
 
 	return (
 		<div className={styles.mainBody}>
