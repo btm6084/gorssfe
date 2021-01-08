@@ -10,6 +10,7 @@ class FeedItem extends Component {
 		}
 
 		this.feedItemBody = React.createRef();
+		this.contentFrame = React.createRef();
 	}
 
 	toggle() {
@@ -40,6 +41,10 @@ class FeedItem extends Component {
 		}
 	}
 
+	onIframeChange() {
+		if (!this.contentFrame) return;
+	}
+
 	componentDidMount() {
 		window.addEventListener('scroll', this.handleScroll);
 	}
@@ -60,7 +65,6 @@ class FeedItem extends Component {
 		if (isReddit(item.target)) {
 			sandbox = true
 		}
-
 
 		return (
 			<div key={item.id} className={styles.feedItem} ref={this.feedItemBody}>
@@ -91,7 +95,7 @@ class FeedItem extends Component {
 					</div>
 
 					<div className={styles.content} align="center">
-						{showMe ? <iframe className={styles.contentFrame} src={"http://localhost:4080/proxy/url/" + encodeURIComponent(item.target)} sandbox={sandbox ? ``:`allow-scripts`}></iframe> : ``}
+						{showMe ? <iframe className={styles.contentFrame} ref={this.contentFrame} onLoad={() => this.onIframeChange()} src={"http://localhost:4080/proxy/url/" + encodeURIComponent(item.target)} sandbox={sandbox ? `` : `allow-scripts`}></iframe> : ``}
 					</div>
 				</div>
 			</div>
@@ -124,6 +128,10 @@ function parseReddit(item) {
 	}
 
 	return item
+}
+
+function getContent(item) {
+
 }
 
 export default FeedItem
