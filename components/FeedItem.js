@@ -100,6 +100,7 @@ class FeedItem extends Component {
 }
 
 const imageRE = /\.jpg|\.png/
+const youtubeRE = /youtu.be\/(.+)/
 
 function cachedReddit(url) {
 	let re = /^https:\/\/(old|www).reddit.com/;
@@ -134,6 +135,9 @@ function getContent(item) {
 	switch(true) {
 		case imageRE.test(item.target):
 			return <img src={item.target} />
+		case youtubeRE.test(item.target):
+			const match = item.target.match(youtubeRE)
+			return <iframe src={`http://www.youtube.com/embed/${match[1]}?feature=oembed`} className={styles.contentFrame} frameborder='0' allowfullscreen=""></iframe>
 		default:
 			let sandbox = false
 			if (isReddit(item.target)) {
