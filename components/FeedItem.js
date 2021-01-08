@@ -91,7 +91,7 @@ class FeedItem extends Component {
 					</div>
 
 					<div className={styles.content} align="center">
-						{showMe ? getContent(item) : ``}
+						{showMe ? getContent(item, this.props.serverHost) : ``}
 					</div>
 				</div>
 			</div>
@@ -131,7 +131,7 @@ function parseReddit(item) {
 	return item
 }
 
-function getContent(item) {
+function getContent(item, serverHost) {
 	switch(true) {
 		case imageRE.test(item.target):
 			return <img src={item.target} />
@@ -144,7 +144,7 @@ function getContent(item) {
 				sandbox = true
 			}
 
-			return <iframe className={styles.contentFrame} src={"http://localhost:4080/proxy/url/" + encodeURIComponent(item.target)} sandbox={sandbox ? `` : `allow-forms allow-scripts`} />
+			return <iframe className={styles.contentFrame} src={`${serverHost}/proxy/url/${encodeURIComponent(item.target)}`} sandbox={sandbox ? `` : `allow-forms allow-scripts`} />
 	}
 }
 

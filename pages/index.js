@@ -3,11 +3,13 @@ import React from 'react';
 import styles from './index.module.scss'
 
 
-function HomePage({ feed, serverHost }) {
+function HomePage({ feed }) {
 	// Effectively componentDidMount
 	React.useEffect(() => {
 		window.setTimeout(() => { window.scrollTo(0, 0); }, 250);
 	})
+
+	const serverHost = 'https://gorss.benjaminmaynor.com/api';
 
 	return (
 		<div className={styles.mainBody}>
@@ -18,7 +20,7 @@ function HomePage({ feed, serverHost }) {
 	)
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
 	const serverHost = "http://localhost:4080";
 	const res = await fetch(`${serverHost}/feed`);
 	const feed = await res.json();
@@ -26,7 +28,6 @@ export async function getStaticProps() {
 	return {
 		props: {
 			feed: feed.result,
-			serverHost: serverHost,
 		},
 	};
 }
