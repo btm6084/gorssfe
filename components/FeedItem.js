@@ -67,7 +67,7 @@ class FeedItem extends Component {
 				<div className={styles.body}>
 					<div className={styles.flexContainer}>
 						<div className={`${styles.titleImage} ${item.imageURL ? `` : styles.noImage}`}>
-							<img src={item.imageURL ? item.imageURL : `/defaultImage.png`}></img>
+							<img src={getThumbnail(item)}></img>
 						</div>
 						<h1 className={styles.title}>
 							<a href={item.canonicalURL} className={styles.titleLink} target="_blank">
@@ -101,6 +101,7 @@ class FeedItem extends Component {
 
 const imageRE = /\.jpg|\.png/
 const youtubeRE = /youtu.be\/(.+)/
+const youtubeRE2 = /youtube.com\/(.+)/
 
 function cachedReddit(url) {
 	let re = /^https:\/\/(old|www).reddit.com/;
@@ -109,6 +110,10 @@ function cachedReddit(url) {
 
 function isReddit(url) {
 	return /(old|www|i|v).reddit.com|v.redd.it/.test(new URL(url).hostname)
+}
+
+function isArstechnica(url) {
+	return /arstechnica.com/.test(new URL(url).hostname)
 }
 
 function parseReddit(item) {
@@ -132,12 +137,13 @@ function parseReddit(item) {
 }
 
 function getContent(item, serverHost) {
-	switch(true) {
+	switch (true) {
 		case imageRE.test(item.target):
 			return <img src={item.target} />
 		case youtubeRE.test(item.target):
+		case youtubeRE2.test(item.target):
 			const match = item.target.match(youtubeRE)
-			return <iframe src={`http://www.youtube.com/embed/${match[1]}?feature=oembed`} className={styles.contentFrame} frameborder='0' allowfullscreen=""></iframe>
+			return <iframe src={`https://www.youtube.com/embed/${match[1]}?feature=oembed`} className={styles.contentFrame} frameborder='0' allowfullscreen=""></iframe>
 		default:
 			let sandbox = false
 			if (isReddit(item.target)) {
@@ -146,6 +152,22 @@ function getContent(item, serverHost) {
 
 			return <iframe className={styles.contentFrame} src={`${serverHost}/proxy/url/?url=${encodeURIComponent(item.target)}`} sandbox={sandbox ? `` : `allow-forms allow-scripts`} />
 	}
+}
+
+function getThumbnail(item) {
+	if (item.imageURL) {
+		return item.imageURL;
+	}
+
+	if (isReddit(item.target)) {
+		return `/redditDefault.svg`;
+	}
+
+	if (isArstechnica(item.target)) {
+		return `/arstechnicaDefault.png`;
+	}
+
+	return `/defaultImage.png`;
 }
 
 export default FeedItem
