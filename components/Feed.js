@@ -8,6 +8,7 @@ class Feed extends Component {
 		this.state = {
 			loading: true,
 			feed: {},
+			count: 0,
 		}
 	}
 
@@ -15,33 +16,34 @@ class Feed extends Component {
 		this.fetchFeed(this.props.serverHost);
 	}
 
-	async fetchFeedAsync(host) {
+	async fetchFeed(host) {
 		try {
 			const res = await fetch(`${host}/feed`);
 			const feed = await res.json();
-			this.setState({ feed: feed.result, loading: false });
+			this.setState({ feed: feed.result, count: feed.total, loading: false });
 		} catch (e) {
 			this.setState({ error: e });
 			console.error(e);
 		}
 	}
 
-	fetchFeed = this.fetchFeedAsync;
-
 	render() {
-		const { feed, loading, error } = this.state;
+		const { feed, count, loading, error } = this.state;
 		const { serverHost } = this.props;
 
 		return (
-			<div className={styles.mainBody}>
-				{
-					loading ?
-						error ? error.toString() : `Loading`
-						:
-						feed.map((item) => (
-							<FeedItem item={item} serverHost={serverHost} key={item.id} />
-						))
-				}
+			<div>
+				<div className={styles.header}>GoRSS Feed Reader! Unread: {count}</div>
+				<div className={styles.mainBody}>
+					{
+						loading ?
+							error ? error.toString() : `Loading`
+							:
+							feed.map((item) => (
+								<FeedItem item={item} serverHost={serverHost} key={item.id} />
+							))
+					}
+				</div>
 			</div>
 		)
 	}

@@ -1,4 +1,16 @@
 .mainBody {
 	width: 100%;
 	color: white;
+	padding-top: 20px;
+}
+
+.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background-color: #222;
+
+	font-size: 0.75rem;
+	color: #ccc;
 }
