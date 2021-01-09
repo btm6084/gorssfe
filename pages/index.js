@@ -8,8 +8,8 @@ function HomePage() {
 		window.addEventListener("unload", function (event) { window.scrollTo(0, 0); });
 	})
 
-	// const serverHost = 'https://dailies.benjaminmaynor.com/api';
-	const serverHost = 'http://localhost:4080';
+	const serverHost = 'https://dailies.benjaminmaynor.com/api';
+	// const serverHost = 'http://localhost:4080';
 
 	return (
 		<Feed serverHost={serverHost} />
