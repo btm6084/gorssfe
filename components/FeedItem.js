@@ -31,6 +31,10 @@ class FeedItem extends Component {
 	}
 
 	markSeen = (id) => {
+		if (this.props.onMarkSeen) {
+			this.props.onMarkSeen();
+		}
+
 		fetch(`${this.props.serverHost}/feed/seen/${id}`, { method: 'PUT' });
 	}
 

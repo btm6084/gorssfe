@@ -27,6 +27,20 @@ class Feed extends Component {
 		}
 	}
 
+	async fetchTotal(host) {
+		try {
+			const res = await fetch(`${host}/feed/unread`);
+			const feed = await res.json();
+			this.setState({ count: feed.total });
+		} catch (e) {
+			console.error(e);
+		}
+	}
+
+	onMarkSeen = () => {
+		this.fetchTotal(this.props.serverHost);
+	}
+
 	render() {
 		const { feed, count, loading, error } = this.state;
 		const { serverHost } = this.props;
@@ -40,7 +54,7 @@ class Feed extends Component {
 							error ? error.toString() : `Loading`
 							:
 							feed.map((item) => (
-								<FeedItem item={item} serverHost={serverHost} key={item.id} />
+								<FeedItem item={item} serverHost={serverHost} onMarkSeen={this.onMarkSeen} key={item.id} />
 							))
 					}
 				</div>
