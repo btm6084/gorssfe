@@ -121,6 +121,10 @@ function isArstechnica(url) {
 	return /arstechnica.com/.test(new URL(url).hostname)
 }
 
+function isGyfycat(url) {
+	return /gfycat.com/.test(new URL(url).hostname)
+}
+
 function parseReddit(item) {
 	let linkRE = /<a href="([^"]+)">\[link\]/;
 
@@ -152,6 +156,8 @@ function getContent(item, serverHost) {
 		case youtubeRE2.test(item.target):
 			match = item.target.match(youtubeRE2)
 			return <iframe src={`https://www.youtube.com/embed/${match[1]}?feature=oembed`} className={styles.contentFrame} frameborder='0' allowfullscreen=""></iframe>
+		case isGyfycat(item.target):
+			return <iframe className={styles.contentFrame} src={`${serverHost}/proxy/url/?url=${encodeURIComponent(item.target)}`} />
 		default:
 			let sandbox = false
 			if (isReddit(item.target)) {
