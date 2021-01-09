@@ -45,7 +45,6 @@
 
 			.title {
 				text-align:center;
-				cursor: pointer;
 				align-self: center;
 				justify-self: center;
 				font-size: 1.5rem;
@@ -55,7 +54,12 @@
 					text-align: left;
 				}
 
+				span {
+					font-size: 0.75rem;
+				}
+
 				.titleLink {
+					cursor: pointer;
 					color: white;
 					text-decoration: none;
 					font-weight: normal;
@@ -66,7 +70,7 @@
 		.metaData {
 			color: #ccc;
 			padding: 0.5rem 0;
-			font-size: 1rem;
+			font-size: 0.75rem;
 
 			&.titleMeta {
 				font-weight: normal;

@@ -75,6 +75,7 @@ class FeedItem extends Component {
 							</a>
 							<div className={`${styles.metaData} ${styles.titleMeta}`}>
 								<span>{item.source}</span>
+								<span>[{item.sourceCount}]</span>
 								<span>{new URL(item.target).hostname.replace('www.', '')}</span>
 							</div>
 						</h1>
