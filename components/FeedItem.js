@@ -130,6 +130,10 @@ function parseReddit(item) {
 		item.target = matches[1];
 	}
 
+	if (item.target[0] === '/') {
+		item.target = 'https://old.reddit.com' + item.target;
+	}
+
 	switch (true) {
 		case imageRE.test(item.target):
 			item.type = "Picture"
