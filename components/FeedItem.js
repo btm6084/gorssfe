@@ -107,6 +107,7 @@ class FeedItem extends Component {
 const imageRE = /\.jpg|\.png/
 const youtubeRE = /youtu.be\/(.+)/
 const youtubeRE2 = /youtube.com\/watch\?v=([^&]+)/
+const redditVideoRE = /v.redd.it/
 
 function cachedReddit(url) {
 	let re = /^https:\/\/(old|www).reddit.com/;
@@ -121,18 +122,12 @@ function isArstechnica(url) {
 	return /arstechnica.com/.test(new URL(url).hostname)
 }
 
-function isGyfycat(url) {
-	return /gfycat.com/.test(new URL(url).hostname)
-}
-
 function parseReddit(item) {
 	let linkRE = /<a href="([^"]+)">\[link\]/;
 
 	if (linkRE.test(item.content)) {
 		const matches = item.content.match(linkRE);
-		if (!/v.redd.it/.test(matches[1])) {
-			item.target = matches[1];
-		}
+		item.target = matches[1];
 	}
 
 	switch (true) {
@@ -156,8 +151,8 @@ function getContent(item, serverHost) {
 		case youtubeRE2.test(item.target):
 			match = item.target.match(youtubeRE2)
 			return <iframe src={`https://www.youtube.com/embed/${match[1]}?feature=oembed`} className={styles.contentFrame} frameborder='0' allowfullscreen=""></iframe>
-		case isGyfycat(item.target):
-			return <iframe className={styles.contentFrame} src={`${serverHost}/proxy/url/?url=${encodeURIComponent(item.target)}`} />
+		case redditVideoRE.test(item.target):
+			return <iframe className={styles.videoFrame} src={`${serverHost}/dashplayer/url/?url=${encodeURIComponent(item.target)}`} />
 		default:
 			let sandbox = false
 			if (isReddit(item.target)) {

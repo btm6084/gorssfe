@@ -109,8 +109,17 @@
 				height: 750px;
 			}
 
+			.videoFrame {
+				border: none;
+				display: block;
+				margin: auto;
+				width: 96%;
+				height: 500px;
+			}
+
 			img {
 				max-width: 100%;
+				max-height: 750px;
 			}
 		}
 	}

@@ -18,7 +18,7 @@ class Feed extends Component {
 
 	async fetchFeed(host) {
 		try {
-			const res = await fetch(`${host}/feed`);
+			const res = await fetch(`${host}/feed/`);
 			const feed = await res.json();
 			this.setState({ feed: feed.result, count: feed.total, loading: false });
 		} catch (e) {
