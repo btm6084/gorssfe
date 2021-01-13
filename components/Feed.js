@@ -29,7 +29,7 @@ class Feed extends Component {
 
 	async fetchTotal(host) {
 		try {
-			const res = await fetch(`${host}/feed/unread`);
+			const res = await fetch(`${host}/feed/unread?cacheBust=${Math.round(new Date().getTime() / 1000)}`);
 			const feed = await res.json();
 			this.setState({ count: feed.total });
 		} catch (e) {
