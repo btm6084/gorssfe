@@ -81,6 +81,7 @@ class FeedItem extends Component {
 								<span>{item.source}</span>
 								<span>[{item.sourceCount}]</span>
 								<span>{new URL(item.target).hostname.replace('www.', '')}</span>
+								{item.subReddit ? <span>/r/{item.subReddit}</span> : ``}
 							</div>
 						</h1>
 
@@ -139,6 +140,12 @@ function parseReddit(item) {
 			item.type = "Picture"
 			item.imageURL = item.target;
 			break;
+	}
+
+	const subRedditRE = new RegExp('/r/([^/]+)')
+	if (subRedditRE.test(item.canonicalURL)) {
+		const matches = item.canonicalURL.match(subRedditRE);
+		item.subReddit = matches[1];
 	}
 
 	return item
