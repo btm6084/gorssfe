@@ -109,6 +109,7 @@ const imageRE = /\.jpg|\.png/
 const youtubeRE = /youtu.be\/(.+)/
 const youtubeRE2 = /youtube.com\/watch\?v=([^&]+)/
 const redditVideoRE = /v.redd.it/
+const imgurImageUrl = /^https:\/\/imgur.com\/[^/]+$/
 
 function cachedReddit(url) {
 	let re = /^https:\/\/(old|www).reddit.com/;
@@ -154,6 +155,9 @@ function parseReddit(item) {
 function getContent(item, serverHost) {
 	let match;
 	switch (true) {
+		case imgurImageUrl.test(item.target):
+			item.target = item.target.replace('imgur.com', 'i.imgur.com') + '.jpg'
+			return <img src={item.target} />
 		case imageRE.test(item.target):
 			return <img src={item.target} />
 		case youtubeRE.test(item.target):
