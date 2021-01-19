@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { TwitterTweetEmbed } from 'react-twitter-embed';
 import styles from './FeedItem.module.scss'
 
 class FeedItem extends Component {
@@ -110,6 +111,7 @@ const youtubeRE = /youtu.be\/(.+)/
 const youtubeRE2 = /youtube.com\/watch\?v=([^&]+)/
 const redditVideoRE = /v.redd.it/
 const imgurImageUrl = /^https:\/\/imgur.com\/[^/]+$/
+const twitterRE = new RegExp('https://twitter.com/[^/]+/status/([^/?]+)')
 
 function cachedReddit(url) {
 	let re = /^https:\/\/(old|www).reddit.com/;
@@ -160,6 +162,9 @@ function getContent(item, serverHost) {
 			return <img src={item.target} />
 		case imageRE.test(item.target):
 			return <img src={item.target} />
+		case twitterRE.test(item.target):
+			match = item.target.match(twitterRE)
+			return <div className={styles.tweetEmbed}><TwitterTweetEmbed tweetId={match[1]} /></div>
 		case youtubeRE.test(item.target):
 			match = item.target.match(youtubeRE)
 			return <iframe src={`https://www.youtube.com/embed/${match[1]}?feature=oembed`} className={styles.contentFrame} frameborder='0' allowfullscreen=""></iframe>
