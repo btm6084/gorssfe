@@ -11,6 +11,7 @@
 		"next": "^10.0.4",
 		"react": "^17.0.1",
 		"react-dom": "^17.0.1",
+		"react-lazyload": "^3.1.0",
 		"react-twitter-embed": "^3.0.3",
 		"sass": "^1.32.2"
 	},

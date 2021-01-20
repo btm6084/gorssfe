@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import LazyLoad from 'react-lazyload';
 import { TwitterTweetEmbed } from 'react-twitter-embed';
 import styles from './FeedItem.module.scss'
 
@@ -72,7 +73,9 @@ class FeedItem extends Component {
 				<div className={styles.body}>
 					<div className={styles.flexContainer}>
 						<div className={`${styles.titleImage} ${item.imageURL ? `` : styles.noImage}`}>
-							<img src={getThumbnail(item)}></img>
+							<LazyLoad height={250} once >
+								<img className={styles.titleImg} src={getThumbnail(item)}></img>
+							</LazyLoad>
 						</div>
 						<h1 className={styles.title}>
 							<a href={item.canonicalURL} className={styles.titleLink} target="_blank">
