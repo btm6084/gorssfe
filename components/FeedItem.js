@@ -125,6 +125,10 @@ function isReddit(url) {
 	return /(old|www|i|v).reddit.com|v.redd.it/.test(new URL(url).hostname)
 }
 
+function isAPNews(url) {
+	return /^https?:\/\/apnews.com/.test(new URL(url).hostname)
+}
+
 function isArstechnica(url) {
 	return /arstechnica.com/.test(new URL(url).hostname)
 }
@@ -178,7 +182,7 @@ function getContent(item, serverHost) {
 			return <iframe className={styles.videoFrame} src={`${serverHost}/dashplayer/url/?url=${encodeURIComponent(item.target)}`} />
 		default:
 			let sandbox = false
-			if (isReddit(item.target)) {
+			if (isReddit(item.target) || isAPNews(item.target)) {
 				sandbox = true
 			}
 
