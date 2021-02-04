@@ -48,7 +48,7 @@ class Feed extends Component {
 		return (
 			<div>
 				<div className={styles.header}>GoRSS Feed Reader! Unread: {count}</div>
-				<div className={styles.mainBody}>
+				<div className={styles.mainBody} style={{ minHeight: feed.length * 300 + `px` }}>
 					{
 						loading ?
 							error ? error.toString() : `Loading`
