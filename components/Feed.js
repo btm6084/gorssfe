@@ -48,7 +48,7 @@ class Feed extends Component {
 		return (
 			<div>
 				<div className={styles.header}>GoRSS Feed Reader! Unread: {count}</div>
-				<div className={styles.mainBody} style={{ minHeight: feed.length * 300 + `px` }}>
+				<div className={styles.mainBody}>
 					{
 						loading ?
 							error ? error.toString() : `Loading`
@@ -58,6 +58,9 @@ class Feed extends Component {
 							))
 					}
 				</div>
+				<div className={styles.reloadButton} onClick={() => window.location.reload()}>Reload</div>
+				<div className={styles.spacer}></div>
+				<div className={styles.reloadButton} onClick={() => window.location.reload()}>Reload</div>
 			</div>
 		)
 	}
