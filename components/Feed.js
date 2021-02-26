@@ -1,6 +1,7 @@
 import FeedItem from "../components/FeedItem";
 import React, { Component } from 'react';
 import styles from './Feed.module.scss'
+import delve from 'dlv';
 
 class Feed extends Component {
 	constructor(props) {
@@ -9,18 +10,54 @@ class Feed extends Component {
 			loading: true,
 			feed: {},
 			count: 0,
+			error: null,
 		}
+
+		this.queryRE = /q=([^&=]+)/
+		this.searchInput = React.createRef();
 	}
 
 	componentDidMount() {
 		this.fetchFeed(this.props.serverHost);
 	}
 
+	doSearch(e) {
+		if (e.keyCode !== 13) {
+			return;
+		}
+
+		let l = window.location;
+		let href = `${l.protocol}//${l.host}?q=${this.searchInput.current.value}`
+		window.location.href = href;
+		e.preventDefault();
+	}
+
 	async fetchFeed(host) {
+		let s = delve(window, 'location.search', '');
+		let href = `${host}/feed/`
+
+		if (this.queryRE.test(s)) {
+			href = `${host}/feed/search/?q=${s.match(this.queryRE)[1]}`
+		}
+
 		try {
-			const res = await fetch(`${host}/feed/`);
+			const res = await fetch(href);
+
+			if (res.status === 404) {
+				this.setState({ feed: [], count: 0, loading: false, error: "No results found." });
+				return;
+			}
+
+			if (parseInt(res.status / 200, 10) !== 1) {
+				console.error(res);
+				this.setState({ feed: [], count: 0, loading: false, error: "A critical error has occured." });
+				return;
+			}
+
 			const feed = await res.json();
-			this.setState({ feed: feed.result, count: feed.total, loading: false });
+			if (feed) {
+				this.setState({ feed: feed.result, count: feed.total, loading: false });
+			}
 		} catch (e) {
 			this.setState({ error: e });
 			console.error(e);
@@ -47,15 +84,22 @@ class Feed extends Component {
 
 		return (
 			<div>
-				<div className={styles.header}>GoRSS Feed Reader! Unread: {count}</div>
+				<div className={styles.header}>
+					<span className={styles.label}>GoRSS Feed Reader! Unread: {count}</span>
+					<span className={styles.search}>
+						Search: <input type="text" name="q" ref={this.searchInput} onKeyDown={(e) => this.doSearch(e)}></input>
+					</span>
+				</div>
+
 				<div className={styles.mainBody}>
 					{
-						loading ?
-							error ? error.toString() : `Loading`
-							:
-							feed.map((item) => (
-								<FeedItem item={item} serverHost={serverHost} onMarkSeen={this.onMarkSeen} key={item.id} />
-							))
+						error ? error.toString() :
+							loading ?
+								`Loading`
+								:
+								feed.map((item) => (
+									<FeedItem item={item} serverHost={serverHost} onMarkSeen={this.onMarkSeen} key={item.id} />
+								))
 					}
 				</div>
 				<div className={styles.reloadButton} onClick={() => window.location.reload()}>Reload</div>
