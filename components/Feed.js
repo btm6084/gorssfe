@@ -87,7 +87,7 @@ class Feed extends Component {
 				<div className={styles.header}>
 					<span className={styles.label}>GoRSS Feed Reader! Unread: {count}</span>
 					<span className={styles.search}>
-						Search: <input type="text" name="q" ref={this.searchInput} onKeyDown={(e) => this.doSearch(e)}></input>
+						Search: <input type="text" name="q" autocomplete="off" ref={this.searchInput} onKeyDown={(e) => this.doSearch(e)}></input>
 					</span>
 				</div>
 
@@ -102,9 +102,9 @@ class Feed extends Component {
 								))
 					}
 				</div>
-				<div className={styles.reloadButton} onClick={() => window.location.reload()}>Reload</div>
+				<div className={styles.reloadButton} onClick={(e) => { e.preventDefault(); window.location.reload() }}>Reload</div>
 				<div className={styles.spacer}></div>
-				<div className={styles.reloadButton} onClick={() => window.location.reload()}>Reload</div>
+				<div className={styles.reloadButton} onClick={(e) => { e.preventDefault(); window.location.reload() }}>Reload</div>
 			</div>
 		)
 	}
