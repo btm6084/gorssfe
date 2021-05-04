@@ -129,6 +129,10 @@ function isAPNews(url) {
 	return /^apnews.com$/.test(new URL(url).hostname)
 }
 
+function isCNBC(url) {
+	return /^(www.)?cnbc.com$/.test(new URL(url).hostname)
+}
+
 function isArstechnica(url) {
 	return /arstechnica.com/.test(new URL(url).hostname)
 }
@@ -182,7 +186,7 @@ function getContent(item, serverHost) {
 			return <iframe className={styles.videoFrame} src={`${serverHost}/dashplayer/url/?url=${encodeURIComponent(item.target)}`} />
 		default:
 			let sandbox = false
-			if (isReddit(item.target) || isAPNews(item.target)) {
+			if (isReddit(item.target) || isAPNews(item.target) || isCNBC(item.target)) {
 				sandbox = true
 			}
 
