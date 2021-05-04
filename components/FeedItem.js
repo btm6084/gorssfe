@@ -126,7 +126,7 @@ function isReddit(url) {
 }
 
 function isAPNews(url) {
-	return /^https?:\/\/apnews.com/.test(new URL(url).hostname)
+	return /^apnews.com$/.test(new URL(url).hostname)
 }
 
 function isArstechnica(url) {
